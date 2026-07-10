@@ -20,7 +20,6 @@ export async function login() {
     });
 
     const result = await request.promptAsync(discovery);
-
     if (result.type !== 'success') {
         throw new Error(`OAuth failed: ${result.type}`);
     }
@@ -28,19 +27,15 @@ export async function login() {
     const tokenResult = await AuthSession.exchangeCodeAsync(
         {
             clientId: authConfig.clientId,
-
             code: result.params.code,
-
             redirectUri: authConfig.redirectUri,
-
             extraParams: {
                 code_verifier: request.codeVerifier!,
             },
         },
         discovery,
     );
-
+    console.log(tokenResult);
     await saveTokens(tokenResult.accessToken, tokenResult.refreshToken ?? '');
-
     return tokenResult;
 }
