@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { View, Text, Button } from 'react-native';
 import { getAccessToken } from '@/auth/storage';
-import { environment } from '@/config/environment';
 import { jwtDecode } from 'jwt-decode';
 import { AccessToken } from '@/auth/access-token';
+import { router } from 'expo-router';
 
 export default function Dashboard() {
     const [login, setLogin] = useState('');
@@ -16,6 +16,7 @@ export default function Dashboard() {
             const token = await getAccessToken();
 
             if (!token) {
+                router.replace('/');
                 return;
             }
 

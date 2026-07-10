@@ -1,11 +1,12 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { clearTokens } from '@/auth/storage';
 
 export default function Header() {
     async function handleLogout() {
-        // await logout();
-        // router.replace("/login");
+        await clearTokens();
+        router.replace('/');
     }
 
     return (
