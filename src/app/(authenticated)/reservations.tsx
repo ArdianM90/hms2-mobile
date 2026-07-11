@@ -1,14 +1,15 @@
 import { View, Text, FlatList, ActivityIndicator, StyleSheet, Pressable } from 'react-native';
 import { useAuth } from '@/auth/AuthContext';
 import { useEffect, useState } from 'react';
-import { Reservation } from '@/models/reservation';
+import { ReservationId } from '@/models/reservation';
 import { getReservations } from '@/services/reservation-service';
 import { colors } from '@/config/theme';
+import { router } from 'expo-router';
 
 export default function Reservations() {
     const { hasRole } = useAuth();
     const [loading, setLoading] = useState(true);
-    const [reservations, setReservations] = useState<Reservation[]>([]);
+    const [reservations, setReservations] = useState<ReservationId[]>([]);
 
     useEffect(() => {
         void loadReservations();
@@ -35,7 +36,10 @@ export default function Reservations() {
                 <Pressable
                     style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
                     onPress={() => {
-                        // router.push(`/reservations/${item.reservationId}`);
+                        router.push({
+                            pathname: '/reservation/[reservationId]',
+                            params: { reservationId: item.reservationId.toString() },
+                        });
                     }}
                 >
                     <View style={styles.leftBorder} />
