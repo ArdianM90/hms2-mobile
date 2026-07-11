@@ -1,9 +1,13 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { useAuth } from '@/auth/AuthContext';
 import { colors } from '@/config/theme';
+import { useRouter } from 'expo-router';
 
 export default function Dashboard() {
+    const router = useRouter();
     const { sub, hasRole } = useAuth();
+
+    const reservationsButtonText = hasRole('ROLE_ADMIN') ? 'Rezerwacje' : 'Moje rezerwacje';
 
     return (
         <View style={styles.container}>
@@ -22,9 +26,9 @@ export default function Dashboard() {
                 {(hasRole('ROLE_GUEST') || hasRole('ROLE_ADMIN')) && (
                     <Pressable
                         style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
-                        onPress={() => {}}
+                        onPress={() => router.push('/reservations')}
                     >
-                        <Text style={styles.buttonText}>Pokaż moje rezerwacje</Text>
+                        <Text style={styles.buttonText}>{reservationsButtonText}</Text>
                     </Pressable>
                 )}
             </View>

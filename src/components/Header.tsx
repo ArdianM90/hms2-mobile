@@ -1,16 +1,13 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '@/auth/AuthContext';
 import { colors } from '@/config/theme';
 
 export default function Header() {
-    const router = useRouter();
     const { logout } = useAuth();
 
     async function handleLogout() {
         await logout();
-        router.replace('/');
     }
 
     return (
