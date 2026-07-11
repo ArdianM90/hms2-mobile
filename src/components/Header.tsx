@@ -2,6 +2,7 @@ import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '@/auth/AuthContext';
+import { colors } from '@/config/theme';
 
 export default function Header() {
     const router = useRouter();
@@ -26,13 +27,13 @@ export default function Header() {
 
 const styles = StyleSheet.create({
     safeArea: {
-        backgroundColor: '#6b1020',
+        backgroundColor: colors.background,
         elevation: 8,
     },
 
     header: {
         height: 60,
-        backgroundColor: '#6b1020',
+        backgroundColor: colors.background,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -40,13 +41,13 @@ const styles = StyleSheet.create({
     },
 
     logo: {
-        color: 'white',
+        color: colors.textOnPrimary,
         fontWeight: '700',
         fontSize: 22,
     },
 
     logout: {
-        color: 'white',
+        color: colors.textOnPrimary,
         fontSize: 16,
         fontWeight: '600',
     },

@@ -4,6 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { View, StyleSheet } from 'react-native';
 import { useEffect } from 'react';
 import { useAuth } from '@/auth/AuthContext';
+import { colors } from '@/config/theme';
 
 export default function Layout() {
     const router = useRouter();
@@ -32,7 +33,7 @@ export default function Layout() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f6f4f5',
+        backgroundColor: colors.background,
     },
 
     content: {

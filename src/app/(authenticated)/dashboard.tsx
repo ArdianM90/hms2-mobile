@@ -1,5 +1,6 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { useAuth } from '@/auth/AuthContext';
+import { colors } from '@/config/theme';
 
 export default function Dashboard() {
     const { sub, hasRole } = useAuth();
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
     greeting: {
         fontSize: 22,
         fontWeight: '600',
-        color: '#2a2a2a',
+        color: colors.text,
     },
 
     buttonGroup: {
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
     },
 
     button: {
-        backgroundColor: '#6b1020',
+        backgroundColor: colors.background,
         paddingVertical: 16,
         borderRadius: 12,
         alignItems: 'center',
@@ -59,11 +60,11 @@ const styles = StyleSheet.create({
     },
 
     buttonPressed: {
-        backgroundColor: '#540c19',
+        backgroundColor: colors.primaryPressed,
     },
 
     buttonText: {
-        color: 'white',
+        color: colors.textOnPrimary,
         fontSize: 17,
         fontWeight: '600',
     },
