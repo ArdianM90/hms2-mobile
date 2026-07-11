@@ -16,15 +16,14 @@ export default function Index() {
         if (isAuthenticated) {
             router.replace('/dashboard');
         } else if (!loginInProgress.current) {
-            loginInProgress.current = true;
             (async () => {
                 try {
-                    await login();
-                    await refresh();
+                    const result = await login();
+                    if (result) {
+                        await refresh();
+                    }
                 } catch (e) {
                     console.error('Login error:', e);
-                } finally {
-                    loginInProgress.current = false;
                 }
             })();
         }

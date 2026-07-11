@@ -2,6 +2,7 @@ import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '@/auth/AuthContext';
 import { colors } from '@/config/theme';
+import { router } from 'expo-router';
 
 export default function Header() {
     const { logout } = useAuth();
@@ -13,7 +14,9 @@ export default function Header() {
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.header}>
-                <Text style={styles.logo}>HMS</Text>
+                <Pressable onPress={() => router.replace('/dashboard')}>
+                    <Text style={styles.logo}>HMS</Text>
+                </Pressable>
                 <Pressable onPress={handleLogout}>
                     <Text style={styles.logout}>Wyloguj</Text>
                 </Pressable>

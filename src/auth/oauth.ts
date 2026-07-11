@@ -6,7 +6,19 @@ import { saveTokens } from '@/auth/storage';
 
 WebBrowser.maybeCompleteAuthSession();
 
-export async function login() {
+let loginPromise: ReturnType<typeof performLogin> | null = null;
+
+export function login() {
+    if (loginPromise) {
+        return loginPromise;
+    }
+    loginPromise = performLogin().finally(() => {
+        loginPromise = null;
+    });
+    return loginPromise;
+}
+
+async function performLogin() {
     const discovery = await AuthSession.fetchDiscoveryAsync(
         authConfig.authorizationEndpoint.replace('/oauth2/authorize', ''),
     );
@@ -35,7 +47,6 @@ export async function login() {
         },
         discovery,
     );
-    console.log(tokenResult);
     await saveTokens(tokenResult.accessToken, tokenResult.refreshToken ?? '');
     return tokenResult;
 }
