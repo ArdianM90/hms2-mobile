@@ -7,4 +7,10 @@ export const colors = {
     textOnPrimary: '#ffffff',
     textGrey: '#555',
     textLightGrey: '#777',
+
+    success: '#2e7d32',
+    warning: '#ef6c00',
+    danger: '#d32f2f',
+    info: '#1976d2',
+    neutral: '#757575',
 };

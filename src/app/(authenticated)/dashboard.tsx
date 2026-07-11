@@ -7,23 +7,25 @@ export default function Dashboard() {
     const router = useRouter();
     const { sub, hasRole } = useAuth();
 
-    const reservationsButtonText = hasRole('ROLE_ADMIN') ? 'Rezerwacje' : 'Moje rezerwacje';
+    const isAdmin = hasRole('ROLE_ADMIN');
+    const tasksButtonText = isAdmin ? 'Zadania pracowników' : 'Moje zadania';
+    const reservationsButtonText = isAdmin ? 'Rezerwacje' : 'Moje rezerwacje';
 
     return (
         <View style={styles.container}>
             <Text style={styles.greeting}>Witaj {sub}</Text>
 
             <View style={styles.buttonGroup}>
-                {(hasRole('ROLE_EMPLOYEE') || hasRole('ROLE_ADMIN')) && (
+                {(isAdmin || hasRole('ROLE_EMPLOYEE')) && (
                     <Pressable
                         style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
-                        onPress={() => {}}
+                        onPress={() => router.push('/tasks')}
                     >
-                        <Text style={styles.buttonText}>Pokaż moje zadania</Text>
+                        <Text style={styles.buttonText}>{tasksButtonText}</Text>
                     </Pressable>
                 )}
 
-                {(hasRole('ROLE_GUEST') || hasRole('ROLE_ADMIN')) && (
+                {(isAdmin || hasRole('ROLE_GUEST')) && (
                     <Pressable
                         style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}
                         onPress={() => router.push('/reservations')}

@@ -78,7 +78,6 @@ const styles = StyleSheet.create({
     },
 
     cardPressed: {
-        // backgroundColor: '#f9f2f4',
         backgroundColor: colors.secondaryPressed,
         transform: [{ scale: 0.98 }],
     },

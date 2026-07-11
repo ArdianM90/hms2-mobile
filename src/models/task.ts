@@ -1,0 +1,22 @@
+export type Task = {
+    employeeTaskId: number;
+    assigneeUserId: string;
+    assigneeFirstName: string;
+    assigneeLastName: string;
+    createdByUserId: string;
+    createdByFirstName: string;
+    createdByLastName: string;
+    roomId: number | null;
+    reservationId: number | null;
+    taskTypeCode: string;
+    taskType: string;
+    statusCode: string;
+    status: string;
+    title: string;
+    description: string | null;
+    priority: number;
+    dueAt: string | null;
+    createdAt: string;
+    startedAt: string | null;
+    completedAt: string | null;
+};
