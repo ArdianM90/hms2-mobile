@@ -27,13 +27,13 @@ export default function Header() {
 
 const styles = StyleSheet.create({
     safeArea: {
-        backgroundColor: colors.background,
+        backgroundColor: colors.primary,
         elevation: 8,
     },
 
     header: {
         height: 60,
-        backgroundColor: colors.background,
+        backgroundColor: colors.primary,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
