@@ -56,7 +56,7 @@ export default function Reservations() {
                         )}
 
                         <View style={styles.row}>
-                            <Text style={styles.label}>{item.reservationStatus.label}</Text>
+                            <Text style={styles.label}>{item.reservationStatus.name}</Text>
 
                             <Text style={styles.price}>{item.totalPrice.toFixed(2)} zł</Text>
                         </View>
@@ -74,7 +74,7 @@ export default function Reservations() {
 const styles = StyleSheet.create({
     card: {
         flexDirection: 'row',
-        backgroundColor: colors.background,
+        backgroundColor: colors.backgroundSecondary,
         borderRadius: 12,
         marginBottom: 14,
         elevation: 3,

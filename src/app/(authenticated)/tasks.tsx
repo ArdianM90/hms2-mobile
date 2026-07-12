@@ -6,6 +6,7 @@ import { Task } from '@/models/task';
 import { getTasks } from '@/services/task-service';
 import TaskStatusBadge from '@/components/TaskStatusBadge';
 import { formatDate } from '@/utils/formatters';
+import { router } from 'expo-router';
 
 export default function Tasks() {
     const { hasRole } = useAuth();
@@ -37,7 +38,10 @@ export default function Tasks() {
                 <Pressable
                     style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
                     onPress={() => {
-                        // router.push(`/tasks/${item.taskId}`);
+                        router.push({
+                            pathname: '/task/[taskId]',
+                            params: { taskId: item.employeeTaskId.toString() },
+                        });
                     }}
                 >
                     <Text style={styles.title}>{item.title}</Text>
@@ -48,15 +52,17 @@ export default function Tasks() {
                         </Text>
                     )}
 
-                    <Text style={styles.type}>{item.taskType}</Text>
+                    <Text style={styles.type}>{item.taskType.name}</Text>
 
                     <View style={styles.details}>
                         <View style={styles.row}>
-                            <TaskStatusBadge statusCode={item.statusCode}>
-                                {item.status}
+                            <TaskStatusBadge statusCode={item.status.code}>
+                                {item.status.name}
                             </TaskStatusBadge>
 
-                            <Text style={styles.due}>{formatDate(item.dueAt)}</Text>
+                            <Text style={styles.due}>
+                                {formatDate(item.dueAt) ?? 'brak terminu'}
+                            </Text>
                         </View>
 
                         <Text style={styles.priority}>Priorytet {item.priority}</Text>

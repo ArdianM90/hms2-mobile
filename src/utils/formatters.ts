@@ -1,6 +1,6 @@
 export function formatDate(date: string | null) {
     if (!date) {
-        return 'Brak terminu';
+        return null;
     }
     const value = new Date(date);
     const day = String(value.getDate()).padStart(2, '0');

@@ -8,3 +8,9 @@ export async function getTasks(isAdmin: boolean) {
 
     return response.data;
 }
+
+export async function getTask(taskId: number): Promise<Task> {
+    const response = await api.get<Task>(`/tasks/${taskId}`);
+
+    return response.data;
+}

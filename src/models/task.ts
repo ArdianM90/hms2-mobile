@@ -1,3 +1,5 @@
+import { DictionaryValue } from '@/models/dictionary-value';
+
 export type Task = {
     employeeTaskId: number;
     assigneeUserId: string;
@@ -7,11 +9,10 @@ export type Task = {
     createdByFirstName: string;
     createdByLastName: string;
     roomId: number | null;
+    roomNumber: string | null;
     reservationId: number | null;
-    taskTypeCode: string;
-    taskType: string;
-    statusCode: string;
-    status: string;
+    taskType: DictionaryValue;
+    status: DictionaryValue;
     title: string;
     description: string | null;
     priority: number;

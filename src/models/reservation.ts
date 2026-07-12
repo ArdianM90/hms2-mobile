@@ -1,4 +1,4 @@
-import { CodeLabel } from '@/models/code-label';
+import { DictionaryValue } from '@/models/dictionary-value';
 
 export type ReservationId = {
     reservationId: number;
@@ -9,8 +9,8 @@ export type ReservationId = {
     createdAt: string;
     updatedAt: string;
     daysQty: number;
-    reservationStatus: CodeLabel;
-    reservationSource: CodeLabel;
+    reservationStatus: DictionaryValue;
+    reservationSource: DictionaryValue;
     totalPrice: number;
     roomsQty: number;
 };
@@ -22,8 +22,8 @@ export type ReservationDetails = {
     startDate: string;
     endDate: string;
     totalPrice: number | null;
-    reservationStatus: CodeLabel;
-    reservationSource: CodeLabel;
+    reservationStatus: DictionaryValue;
+    reservationSource: DictionaryValue;
     rooms: ReservationRoom[];
     comment: string | null;
 };

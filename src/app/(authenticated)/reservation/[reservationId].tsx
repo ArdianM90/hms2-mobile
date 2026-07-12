@@ -51,13 +51,13 @@ export default function ReservationDetailsScreen() {
                 <View style={styles.row}>
                     <Text>Status</Text>
 
-                    <Text style={styles.status}>{reservation.reservationStatus.label}</Text>
+                    <Text style={styles.status}>{reservation.reservationStatus.name}</Text>
                 </View>
 
                 <View style={styles.row}>
                     <Text>Źródło</Text>
 
-                    <Text>{reservation.reservationSource.label}</Text>
+                    <Text>{reservation.reservationSource.name}</Text>
                 </View>
 
                 <View style={styles.separator} />
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     },
 
     card: {
-        backgroundColor: colors.background,
+        backgroundColor: colors.backgroundSecondary,
         borderRadius: 12,
         padding: 18,
         elevation: 3,
@@ -127,14 +127,14 @@ const styles = StyleSheet.create({
         fontSize: 22,
         fontWeight: '700',
         marginBottom: 16,
-        color: colors.text,
+        color: colors.primary,
     },
 
     sectionTitle: {
         fontSize: 16,
         fontWeight: '700',
         marginBottom: 8,
-        color: colors.text,
+        color: colors.primary,
     },
 
     row: {
@@ -156,6 +156,7 @@ const styles = StyleSheet.create({
     price: {
         fontSize: 18,
         fontWeight: '700',
+        color: colors.primary,
     },
 
     separator: {
