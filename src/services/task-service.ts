@@ -1,10 +1,20 @@
 import { api } from '@/api/api';
-import { Task } from '@/models/task';
+import { PageableParams, Task, TasksFilterParams } from '@/models/task';
+import { PageableResult } from '@/models/pageable';
 
-export async function getTasks(isAdmin: boolean) {
-    const endpoint = isAdmin ? '/tasks' : '/tasks/my';
+export async function getTasks(
+    isAdmin: boolean,
+    filters: TasksFilterParams,
+    pageable: PageableParams,
+) {
+    const endpoint = isAdmin ? '/tasks' : '/tasks';
 
-    const response = await api.get<Task[]>(endpoint);
+    const response = await api.get<PageableResult<Task[]>>(endpoint, {
+        params: {
+            ...filters,
+            ...pageable,
+        },
+    });
 
     return response.data;
 }

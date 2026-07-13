@@ -21,3 +21,16 @@ export type Task = {
     startedAt: string | null;
     completedAt: string | null;
 };
+
+export type TasksFilterParams = {
+    query?: string;
+    taskTypeCodes?: string[];
+    dueFrom?: string;
+    dueTo?: string;
+};
+
+export type PageableParams = {
+    page: number;
+    pageSize: number;
+    sort?: string;
+};

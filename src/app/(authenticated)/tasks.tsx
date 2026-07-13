@@ -7,20 +7,44 @@ import { getTasks } from '@/services/task-service';
 import TaskStatusBadge from '@/components/TaskStatusBadge';
 import { formatDate } from '@/utils/formatters';
 import { router } from 'expo-router';
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
 export default function Tasks() {
     const { hasRole } = useAuth();
     const [loading, setLoading] = useState(true);
     const [tasks, setTasks] = useState<Task[]>([]);
+    const [page, setPage] = useState(0);
+    const [total, setTotal] = useState(0);
+    const [showPicker, setShowPicker] = useState(false);
+
+    const today = new Date().toISOString().split('T')[0];
+    const [selectedDate, setSelectedDate] = useState(today);
+
+    const DEFAULT_PAGEABLE = {
+        page: 1,
+        pageSize: 20,
+        sort: 'dueAt,asc',
+    };
 
     useEffect(() => {
         void loadTasks();
-    }, []);
+    }, [selectedDate]);
 
     async function loadTasks() {
+        setLoading(true);
+
         try {
-            const data = await getTasks(hasRole('ROLE_ADMIN'));
-            setTasks(data);
+            const result = await getTasks(
+                hasRole('ROLE_ADMIN'),
+                {
+                    dueFrom: selectedDate,
+                    dueTo: selectedDate,
+                },
+                DEFAULT_PAGEABLE,
+            );
+
+            setTasks(result.results);
+            setTotal(result.total);
         } finally {
             setLoading(false);
         }
@@ -34,6 +58,45 @@ export default function Tasks() {
         <FlatList
             data={tasks}
             keyExtractor={(item) => item.employeeTaskId.toString()}
+            ListHeaderComponent={
+                <>
+                    <Pressable
+                        style={({ pressed }) => [
+                            styles.dateButton,
+                            pressed && styles.dateButtonPressed,
+                        ]}
+                        onPress={() => setShowPicker((prev) => !prev)}
+                    >
+                        <Text style={styles.dateButtonText}>📅 Termin: {selectedDate}</Text>
+                    </Pressable>
+
+                    {showPicker && (
+                        <DateTimePicker
+                            value={new Date(selectedDate)}
+                            mode="date"
+                            onChange={(event: DateTimePickerEvent, date?: Date) => {
+                                setShowPicker(false);
+
+                                if (date) {
+                                    setSelectedDate(date.toISOString().split('T')[0]);
+                                }
+                            }}
+                        />
+                    )}
+                </>
+            }
+            ListEmptyComponent={
+                <View style={styles.emptyContainer}>
+                    <Text style={styles.emptyIcon}>📋</Text>
+
+                    <Text style={styles.emptyTitle}>Brak zadań</Text>
+
+                    <Text style={styles.emptyText}>
+                        Dla wybranego dnia nie znaleziono żadnych zadań.
+                    </Text>
+                </View>
+            }
+
             renderItem={({ item }) => (
                 <Pressable
                     style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
@@ -129,5 +192,48 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '600',
         color: colors.textGrey,
+    },
+
+    emptyContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 64,
+        paddingHorizontal: 24,
+    },
+
+    emptyIcon: {
+        fontSize: 48,
+        marginBottom: 12,
+    },
+
+    emptyTitle: {
+        fontSize: 18,
+        fontWeight: '700',
+        color: colors.text,
+        marginBottom: 6,
+    },
+
+    emptyText: {
+        fontSize: 15,
+        color: colors.textLightGrey,
+        textAlign: 'center',
+    },
+
+    dateButton: {
+        backgroundColor: colors.background,
+        borderRadius: 12,
+        paddingVertical: 14,
+        paddingHorizontal: 16,
+        marginBottom: 16,
+        elevation: 2,
+    },
+
+    dateButtonText: {
+        fontWeight: '600',
+        color: colors.primary,
+    },
+
+    dateButtonPressed: {
+        backgroundColor: colors.secondaryPressed,
     },
 });
