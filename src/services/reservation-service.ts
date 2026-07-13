@@ -1,9 +1,22 @@
 import { api } from '@/api/api';
-import { ReservationId, ReservationDetails } from '@/models/reservation';
+import {
+    ReservationDetails,
+    ReservationListItem,
+    ReservationsFilterParams,
+} from '@/models/reservation';
+import { PageableParams } from '@/models/task';
+import { PageableResult } from '@/models/pageable';
 
-export async function getReservations(isAdmin: boolean): Promise<ReservationId[]> {
-    const endpoint = isAdmin ? '/reservations/all' : '/reservations';
-    const response = await api.get<ReservationId[]>(endpoint);
+export async function getReservations(
+    filters: ReservationsFilterParams,
+    pageable: PageableParams,
+): Promise<PageableResult<ReservationListItem[]>> {
+    const response = await api.get<PageableResult<ReservationListItem[]>>('/reservations', {
+        params: {
+            ...filters,
+            ...pageable,
+        },
+    });
 
     return response.data;
 }

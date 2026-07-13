@@ -35,7 +35,6 @@ export default function Tasks() {
 
         try {
             const result = await getTasks(
-                hasRole('ROLE_ADMIN'),
                 {
                     dueFrom: selectedDate,
                     dueTo: selectedDate,

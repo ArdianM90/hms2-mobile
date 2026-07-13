@@ -1,18 +1,25 @@
 import { DictionaryValue } from '@/models/dictionary-value';
 
-export type ReservationId = {
+export type ReservationListItem = {
     reservationId: number;
-    guestFirstName?: string;
-    guestLastName?: string;
+    guestFirstName: string;
+    guestLastName: string;
     startDate: string;
     endDate: string;
     createdAt: string;
-    updatedAt: string;
+    updatedAt: string | null;
     daysQty: number;
     reservationStatus: DictionaryValue;
     reservationSource: DictionaryValue;
     totalPrice: number;
     roomsQty: number;
+};
+
+export type ReservationsFilterParams = {
+    query?: string;
+    reservationStatusCode?: string;
+    createdFrom?: string;
+    createdTo?: string;
 };
 
 export type ReservationDetails = {

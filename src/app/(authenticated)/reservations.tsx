@@ -1,24 +1,46 @@
 import { View, Text, FlatList, ActivityIndicator, StyleSheet, Pressable } from 'react-native';
 import { useAuth } from '@/auth/AuthContext';
 import { useEffect, useState } from 'react';
-import { ReservationId } from '@/models/reservation';
 import { getReservations } from '@/services/reservation-service';
 import { colors } from '@/config/theme';
 import { router } from 'expo-router';
+import { ReservationListItem } from '@/models/reservation';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function Reservations() {
     const { hasRole } = useAuth();
     const [loading, setLoading] = useState(true);
-    const [reservations, setReservations] = useState<ReservationId[]>([]);
+    const [reservations, setReservations] = useState<ReservationListItem[]>([]);
+    const [total, setTotal] = useState(0);
+    const [showPicker, setShowPicker] = useState(false);
+
+    const today = new Date().toISOString().split('T')[0];
+    const [selectedDate, setSelectedDate] = useState(today);
+
+    const DEFAULT_PAGEABLE = {
+        page: 1,
+        pageSize: 20,
+        sort: 'createdAt,desc',
+    };
 
     useEffect(() => {
         void loadReservations();
-    }, []);
+    }, [selectedDate]);
 
     async function loadReservations() {
+        setLoading(true);
+
         try {
-            const data = await getReservations(hasRole('ROLE_ADMIN'));
-            setReservations(data);
+            const result = await getReservations(
+                {
+                    createdFrom: selectedDate,
+                    createdTo: selectedDate,
+                },
+                DEFAULT_PAGEABLE,
+            );
+
+            setReservations(result.results);
+            setTotal(result.total);
         } finally {
             setLoading(false);
         }
@@ -32,6 +54,45 @@ export default function Reservations() {
         <FlatList
             data={reservations}
             keyExtractor={(item) => item.reservationId.toString()}
+            ListHeaderComponent={
+                <>
+                    <Pressable
+                        style={({ pressed }) => [
+                            styles.dateButton,
+                            pressed && styles.dateButtonPressed,
+                        ]}
+                        onPress={() => setShowPicker((prev) => !prev)}
+                    >
+                        <Text style={styles.dateButtonText}>📅 Utworzono: {selectedDate}</Text>
+                    </Pressable>
+
+                    {showPicker && (
+                        <DateTimePicker
+                            value={new Date(selectedDate)}
+                            mode="date"
+                            onValueChange={(_event, date) => {
+                                setShowPicker(false);
+                                if (date) {
+                                    setSelectedDate(date.toISOString().split('T')[0]);
+                                }
+                            }}
+                            onDismiss={() => setShowPicker(false)}
+                        />
+                    )}
+                </>
+            }
+            ListEmptyComponent={
+                <View style={styles.emptyContainer}>
+                    <Text style={styles.emptyIcon}>📋</Text>
+
+                    <Text style={styles.emptyTitle}>Brak rezerwacji</Text>
+
+                    <Text style={styles.emptyText}>
+                        Dla wybranego dnia nie znaleziono żadnych rezerwacji.
+                    </Text>
+                </View>
+            }
+
             renderItem={({ item }) => (
                 <Pressable
                     style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
@@ -128,5 +189,48 @@ const styles = StyleSheet.create({
     small: {
         color: colors.textLightGrey,
         marginTop: 4,
+    },
+
+    emptyContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 64,
+        paddingHorizontal: 24,
+    },
+
+    emptyIcon: {
+        fontSize: 48,
+        marginBottom: 12,
+    },
+
+    emptyTitle: {
+        fontSize: 18,
+        fontWeight: '700',
+        color: colors.text,
+        marginBottom: 6,
+    },
+
+    emptyText: {
+        fontSize: 15,
+        color: colors.textLightGrey,
+        textAlign: 'center',
+    },
+
+    dateButton: {
+        backgroundColor: colors.background,
+        borderRadius: 12,
+        paddingVertical: 14,
+        paddingHorizontal: 16,
+        marginBottom: 16,
+        elevation: 2,
+    },
+
+    dateButtonText: {
+        fontWeight: '600',
+        color: colors.primary,
+    },
+
+    dateButtonPressed: {
+        backgroundColor: colors.secondaryPressed,
     },
 });
