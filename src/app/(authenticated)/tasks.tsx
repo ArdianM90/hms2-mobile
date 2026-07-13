@@ -74,13 +74,13 @@ export default function Tasks() {
                         <DateTimePicker
                             value={new Date(selectedDate)}
                             mode="date"
-                            onChange={(event: DateTimePickerEvent, date?: Date) => {
+                            onValueChange={(_event, date) => {
                                 setShowPicker(false);
-
                                 if (date) {
                                     setSelectedDate(date.toISOString().split('T')[0]);
                                 }
                             }}
+                            onDismiss={() => setShowPicker(false)}
                         />
                     )}
                 </>
