@@ -16,10 +16,9 @@ export type ReservationListItem = {
 };
 
 export type ReservationsFilterParams = {
-    query?: string;
     reservationStatusCode?: string;
-    createdFrom?: string;
-    createdTo?: string;
+    createdFrom: string;
+    createdTo: string;
 };
 
 export type ReservationDetails = {

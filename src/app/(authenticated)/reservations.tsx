@@ -6,6 +6,8 @@ import { colors } from '@/config/theme';
 import { router } from 'expo-router';
 import { ReservationListItem } from '@/models/reservation';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { DictionaryValue } from '@/models/dictionary-value';
+import { DictionaryType, getDictionary } from '@/services/dictionaryService';
 
 export default function Reservations() {
     const { hasRole } = useAuth();
@@ -16,6 +18,8 @@ export default function Reservations() {
 
     const today = new Date().toISOString().split('T')[0];
     const [selectedDate, setSelectedDate] = useState(today);
+    const [statuses, setStatuses] = useState<DictionaryValue[]>([]);
+    const [selectedStatus, setSelectedStatus] = useState<string | undefined>();
 
     const DEFAULT_PAGEABLE = {
         page: 1,
@@ -24,8 +28,18 @@ export default function Reservations() {
     };
 
     useEffect(() => {
+        void loadStatuses();
+    }, []);
+
+    async function loadStatuses() {
+        const result = await getDictionary(DictionaryType.RESERVATION_STATUS);
+
+        setStatuses(result);
+    }
+
+    useEffect(() => {
         void loadReservations();
-    }, [selectedDate]);
+    }, [selectedDate, selectedStatus]);
 
     async function loadReservations() {
         setLoading(true);
@@ -35,6 +49,7 @@ export default function Reservations() {
                 {
                     createdFrom: selectedDate,
                     createdTo: selectedDate,
+                    reservationStatusCode: selectedStatus,
                 },
                 DEFAULT_PAGEABLE,
             );
@@ -56,6 +71,41 @@ export default function Reservations() {
             keyExtractor={(item) => item.reservationId.toString()}
             ListHeaderComponent={
                 <>
+                    <View style={styles.statusContainer}>
+                        <Pressable
+                            style={[styles.statusChip, !selectedStatus && styles.statusChipActive]}
+                            onPress={() => setSelectedStatus(undefined)}
+                        >
+                            <Text
+                                style={[
+                                    styles.statusText,
+                                    !selectedStatus && styles.statusTextActive,
+                                ]}
+                            >
+                                Wszystkie
+                            </Text>
+                        </Pressable>
+
+                        {statuses.map((status) => (
+                            <Pressable
+                                key={status.code}
+                                style={[
+                                    styles.statusChip,
+                                    selectedStatus === status.code && styles.statusChipActive,
+                                ]}
+                                onPress={() => setSelectedStatus(status.code)}
+                            >
+                                <Text
+                                    style={[
+                                        styles.statusText,
+                                        selectedStatus === status.code && styles.statusTextActive,
+                                    ]}
+                                >
+                                    {status.name}
+                                </Text>
+                            </Pressable>
+                        ))}
+                    </View>
                     <Pressable
                         style={({ pressed }) => [
                             styles.dateButton,
@@ -232,5 +282,32 @@ const styles = StyleSheet.create({
 
     dateButtonPressed: {
         backgroundColor: colors.secondaryPressed,
+    },
+
+    statusContainer: {
+        flexDirection: 'row',
+        gap: 8,
+        marginBottom: 12,
+    },
+
+    statusChip: {
+        paddingVertical: 8,
+        paddingHorizontal: 12,
+        borderRadius: 20,
+        backgroundColor: colors.backgroundSecondary,
+    },
+
+    statusChipActive: {
+        backgroundColor: colors.primary,
+    },
+
+    statusText: {
+        fontSize: 13,
+        fontWeight: '600',
+        color: colors.textGrey,
+    },
+
+    statusTextActive: {
+        color: '#fff',
     },
 });

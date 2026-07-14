@@ -23,10 +23,9 @@ export type Task = {
 };
 
 export type TasksFilterParams = {
-    query?: string;
-    taskTypeCodes?: string[];
-    dueFrom?: string;
-    dueTo?: string;
+    taskStatusCodes?: string[];
+    dueFrom: string;
+    dueTo: string;
 };
 
 export type PageableParams = {
