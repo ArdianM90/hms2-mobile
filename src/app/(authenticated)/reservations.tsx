@@ -47,8 +47,8 @@ export default function Reservations() {
         try {
             const result = await getReservations(
                 {
-                    createdFrom: selectedDate,
-                    createdTo: selectedDate,
+                    from: selectedDate,
+                    to: selectedDate,
                     reservationStatusCode: selectedStatus,
                 },
                 DEFAULT_PAGEABLE,
@@ -113,7 +113,7 @@ export default function Reservations() {
                         ]}
                         onPress={() => setShowPicker((prev) => !prev)}
                     >
-                        <Text style={styles.dateButtonText}>📅 Utworzono: {selectedDate}</Text>
+                        <Text style={styles.dateButtonText}>📅 Dzień pobytu: {selectedDate}</Text>
                     </Pressable>
 
                     {showPicker && (
