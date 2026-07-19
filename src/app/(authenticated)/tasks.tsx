@@ -36,7 +36,6 @@ export default function Tasks() {
 
     async function loadStatuses() {
         const result = await getDictionary(DictionaryType.TASK_STATUS);
-
         setStatuses(result);
     }
 

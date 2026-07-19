@@ -1,8 +1,8 @@
 import { InternalAxiosRequestConfig } from 'axios';
-import { getAccessToken } from '@/auth/storage';
+import { getValidAccessToken } from '@/auth/token-refresh';
 
 export async function authInterceptor(config: InternalAxiosRequestConfig) {
-    const token = await getAccessToken();
+    const token = await getValidAccessToken();
 
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;

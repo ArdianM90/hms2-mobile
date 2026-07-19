@@ -12,6 +12,10 @@ export async function getAccessToken() {
     return SecureStore.getItemAsync(ACCESS_TOKEN);
 }
 
+export async function getRefreshToken() {
+    return SecureStore.getItemAsync(REFRESH_TOKEN);
+}
+
 export async function clearTokens() {
     await SecureStore.deleteItemAsync(ACCESS_TOKEN);
     await SecureStore.deleteItemAsync(REFRESH_TOKEN);

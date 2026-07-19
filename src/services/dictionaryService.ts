@@ -12,6 +12,5 @@ export const DictionaryType = {
 
 export async function getDictionary(dictionaryType: string): Promise<DictionaryValue[]> {
     const response = await api.get<DictionaryValue[]>(`/dictionaries/${dictionaryType}`);
-
     return response.data;
 }
